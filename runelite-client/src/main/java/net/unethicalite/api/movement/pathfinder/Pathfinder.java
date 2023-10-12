@@ -86,10 +86,10 @@ public class Pathfinder implements Callable<List<WorldPoint>>
 		}
 		this.start.addAll(start.stream().map(point -> new Node(point, null, goldAvailable)).collect(Collectors.toList()));
 		this.targetsInWilderness = targetTiles.stream().anyMatch(Pathfinder::isInWilderness);
-		if (targetTiles.stream().allMatch(collisionMap::fullBlock))
+		/*if (targetTiles.stream().allMatch(collisionMap::fullBlock))
 		{
 			log.warn("Walking to a {}, pathfinder will be slow", targetTiles.size() == 1 ? "blocked tile" : "fully blocked area");
-		}
+		}*/
 	}
 
 	private void addNeighbors(Node node)
