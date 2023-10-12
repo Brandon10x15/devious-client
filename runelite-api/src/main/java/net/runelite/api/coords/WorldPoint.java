@@ -571,8 +571,16 @@ public class WorldPoint implements net.unethicalite.api.Positionable
 
 		Tile[][][] tiles = client.getScene().getTiles();
 		Tile sourceTile = tiles[plane][thisX][thisY];
+        if (sourceTile == null)
+        {
+            return null;
+        }
 
 		Tile targetTile = tiles[plane][otherX][otherY];
+        if (targetTile == null)
+        {
+            return null;
+        }
 		List<Tile> checkpointTiles = sourceTile.pathTo(targetTile);
 		if (checkpointTiles == null)
 		{

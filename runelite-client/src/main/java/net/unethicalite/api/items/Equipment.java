@@ -75,6 +75,10 @@ public class Equipment extends Items
 		return EQUIPMENT.first(names);
 	}
 
+    public static Item getWeapon() {
+        return fromSlot(EquipmentInventorySlot.WEAPON);
+    }
+
 	private static WidgetInfo getEquipmentWidgetInfo(int itemIndex)
 	{
 		for (EquipmentInventorySlot equipmentInventorySlot : EquipmentInventorySlot.values())

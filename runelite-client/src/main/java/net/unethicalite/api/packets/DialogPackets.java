@@ -6,6 +6,8 @@ import net.runelite.api.packets.PacketBufferNode;
 import net.unethicalite.api.game.Game;
 import net.unethicalite.client.Static;
 
+import static net.runelite.api.util.Numbers.sleepRand;
+
 public class DialogPackets
 {
 	public static void sendNumberInput(int number)
@@ -27,15 +29,27 @@ public class DialogPackets
 		client.getPacketWriter().queuePacket(packetBufferNode);
 	}
 
-	public static void sendTextInput(String text)
-	{
-		Client client = Static.getClient();
-		ClientPacket clientPacket = Game.getClientPacket();
-		PacketBufferNode packetBufferNode = Static.getClient().preparePacket(clientPacket.RESUME_STRINGDIALOG(), client.getPacketWriter().getIsaacCipher());
-		packetBufferNode.getPacketBuffer().writeByte(text.length() + 1);
-		packetBufferNode.getPacketBuffer().writeStringCp1252NullTerminated(text);
-		client.getPacketWriter().queuePacket(packetBufferNode);
-	}
+    public static void sendTextInput(String text)
+    {
+        Client client = Static.getClient();
+        ClientPacket clientPacket = Game.getClientPacket();
+        PacketBufferNode packetBufferNode = Static.getClient().preparePacket(clientPacket.RESUME_STRINGDIALOG(), client.getPacketWriter().getIsaacCipher());
+        for(String letter : text.split("")) {
+            packetBufferNode.getPacketBuffer().writeByte(letter.length() + 1);
+            packetBufferNode.getPacketBuffer().writeStringCp1252NullTerminated(letter);
+            sleepRand();
+        }
+        client.getPacketWriter().queuePacket(packetBufferNode);
+    }
+    public static void sendTextInputInstant(String text)
+    {
+        Client client = Static.getClient();
+        ClientPacket clientPacket = Game.getClientPacket();
+        PacketBufferNode packetBufferNode = Static.getClient().preparePacket(clientPacket.RESUME_STRINGDIALOG(), client.getPacketWriter().getIsaacCipher());
+        packetBufferNode.getPacketBuffer().writeByte(text.length() + 1);
+        packetBufferNode.getPacketBuffer().writeStringCp1252NullTerminated(text);
+        client.getPacketWriter().queuePacket(packetBufferNode);
+    }
 
 	public static void closeInterface()
 	{

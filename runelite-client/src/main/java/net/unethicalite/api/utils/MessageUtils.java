@@ -39,6 +39,11 @@ public class MessageUtils
 
     public static void addMessage(String message)
     {
+        addMessage(message, ChatColorType.NORMAL, ChatMessageType.CONSOLE);
+    }
+
+    public static void addMessageHighlighted(String message)
+    {
         addMessage(message, ChatColorType.HIGHLIGHT, ChatMessageType.CONSOLE);
     }
 
@@ -61,4 +66,10 @@ public class MessageUtils
     {
         addMessage(message, color, ChatMessageType.CONSOLE);
     }
+
+    public static void error(String message) { addMessage(message, new Color(255, 0, 0), ChatMessageType.CONSOLE); }
+    public static void warning(String message) { addMessage(message, new Color(252, 211, 3), ChatMessageType.CONSOLE); }
+    public static void success(String message) { addMessage(message, new Color(12, 151, 232), ChatMessageType.CONSOLE); }
+    public static void master(String message) { addMessage(message, new Color(12, 151, 232), ChatMessageType.CONSOLE); }
+
 }

@@ -202,21 +202,19 @@ public class Bank extends Items
 	public static void deposit(Predicate<Item> filter, int amount)
 	{
 		Item item = Inventory.getFirst(filter);
-		if (item == null)
-		{
-			return;
-		}
+		if (item != null) {
 
-		String action = getAction(item, amount, false);
-		int actionIndex = item.getActionIndex(action);
+            String action = getAction(item, amount, false);
+            int actionIndex = item.getActionIndex(action);
+            if(actionIndex == -1) { return; }
 
-		item.interact(actionIndex);
+            item.interact(actionIndex);
 
-		if (action.equals("Deposit-X"))
-		{
-			Dialog.enterAmount(amount);
-			Time.sleepTick();
-		}
+            if (action.equals("Deposit-X")) {
+                Dialog.enterAmount(amount);
+                Time.sleepTick();
+            }
+        }
 	}
 
 	public static void withdrawAll(String name, WithdrawMode withdrawMode)
@@ -255,6 +253,7 @@ public class Bank extends Items
 
 		String action = getAction(item, amount, true);
 		int actionIndex = item.getActionIndex(action);
+        if(actionIndex == -1) { return; }
 
 		if (withdrawMode == WithdrawMode.NOTED && !isNotedWithdrawMode())
 		{
@@ -269,6 +268,7 @@ public class Bank extends Items
 		}
 
 		item.interact(actionIndex + 1);
+        Time.sleepTick();
 
 		if (action.equals("Withdraw-X"))
 		{
@@ -308,6 +308,7 @@ public class Bank extends Items
 		}
 
 		item.interact(withdrawOption.getMenuIndex());
+        Time.sleepTick();
 	}
 
 	public static void setWithdrawMode(boolean noted)

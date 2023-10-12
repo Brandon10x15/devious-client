@@ -104,6 +104,7 @@ import net.runelite.client.util.OSType;
 import net.runelite.client.util.OSXUtil;
 import net.runelite.client.util.SwingUtil;
 import net.runelite.client.util.WinUtil;
+import net.unethicalite.api.game.Game;
 import org.pushingpixels.substance.internal.SubstanceSynapse;
 import org.pushingpixels.substance.internal.utils.SubstanceCoreUtilities;
 import org.pushingpixels.substance.internal.utils.SubstanceTitlePaneUtilities;
@@ -299,6 +300,9 @@ public class ClientUI
 	@Subscribe
 	public void onGameStateChanged(final GameStateChanged event)
 	{
+        if(event.getGameState() == GameState.LOGGING_IN) {
+            Game.setClickedPlay(false);
+        }
 		if (event.getGameState() != GameState.LOGGED_IN || !(client instanceof Client) || !config.usernameInTitle())
 		{
 			return;

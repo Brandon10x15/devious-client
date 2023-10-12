@@ -106,10 +106,14 @@ public interface World
 	 */
 	void setAddress(String address);
 
-	default boolean isMembers()
-	{
-		return getTypes().contains(WorldType.MEMBERS);
-	}
+    default boolean isMembers()
+    {
+        return getTypes().contains(WorldType.MEMBERS);
+    }
+    default boolean isFreshStart()
+    {
+        return getTypes().contains(WorldType.FRESH_START_WORLD);
+    }
 
 	default boolean isAllPkWorld()
 	{
@@ -131,11 +135,6 @@ public interface World
 		return getTypes().contains(WorldType.SEASONAL);
 	}
 
-	default boolean isNormal()
-	{
-		return !isAllPkWorld() && !isSkillTotal() && !isTournament() && !isLeague() && !isPvpArena() && !isQuestSpeedRunning();
-	}
-
 	default boolean isPvpArena()
 	{
 		return getTypes().contains(WorldType.PVP_ARENA);
@@ -145,4 +144,30 @@ public interface World
 	{
 		return getTypes().contains(WorldType.QUEST_SPEEDRUNNING);
 	}
+
+    default boolean isNormal()
+    {
+        WorldType[] normalTypeExclude = { WorldType.BETA_WORLD, WorldType.BOUNTY, WorldType.DEADMAN,
+                WorldType.FRESH_START_WORLD, WorldType.HIGH_RISK, WorldType.LAST_MAN_STANDING, WorldType.NOSAVE_MODE,
+                WorldType.PVP, WorldType.PVP_ARENA, WorldType.QUEST_SPEEDRUNNING, WorldType.SEASONAL,
+                WorldType.SKILL_TOTAL, WorldType.TOURNAMENT_WORLD };
+        return !containsTypes(normalTypeExclude);
+    }
+
+    default boolean isNormalMembers()
+    {
+        return isNormal() && isMembers();
+    }
+
+    default boolean isNormalNonMembers()
+    {
+        return isNormal() && !isMembers();
+    }
+
+    private boolean containsTypes(WorldType[] excludeList) {
+        for ( var exclude : excludeList) {
+            if(getTypes().contains(exclude)) { return true; }
+        }
+        return false;
+    }
 }

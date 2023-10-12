@@ -4,6 +4,7 @@ import net.runelite.api.Client;
 import net.runelite.api.events.GameTick;
 import net.runelite.client.eventbus.EventBus;
 import net.runelite.client.eventbus.Subscribe;
+import net.unethicalite.api.game.Game;
 import net.unethicalite.client.config.UnethicaliteConfig;
 
 import javax.inject.Inject;
@@ -34,7 +35,7 @@ public class NeverLogManager
 	@Subscribe
 	private void onGameTick(GameTick e)
 	{
-		if (config.neverLog() && checkIdle())
+		if (config.neverLog() && checkIdle() && !Game.isOnBreak())
 		{
 			randomDelay = randomDelay();
 			Executors.newSingleThreadExecutor()

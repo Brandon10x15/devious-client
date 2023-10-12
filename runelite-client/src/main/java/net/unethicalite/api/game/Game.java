@@ -6,6 +6,8 @@ import net.runelite.api.Player;
 import net.runelite.api.coords.WorldPoint;
 import net.unethicalite.api.account.GameAccount;
 import net.unethicalite.api.entities.Players;
+import net.unethicalite.api.input.Mouse;
+import net.unethicalite.api.script.blocking_events.WelcomeScreenEvent;
 import net.unethicalite.api.widgets.Tab;
 import net.unethicalite.api.widgets.Tabs;
 import net.unethicalite.api.widgets.Widgets;
@@ -16,13 +18,37 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
 
+import static net.runelite.api.util.Numbers.sleepRandom;
+import static net.unethicalite.api.commons.Time.sleepUntil;
+
 public class Game
 {
 	private static final int MEMBER_DAYS_VARP = 1780;
 	private static final int CUTSCENE_VARBIT = 542;
 	private static final String LOGOUT_ACTION = "Logout";
 
-	@Getter
+    private static boolean onBreak = false;
+    private static boolean clickedPlay = false;
+    private static GameState lastGameState;
+    private static GameState currentGameState;
+
+    public static boolean isOnBreak() {
+        return onBreak;
+    }
+
+    public static void setOnBreak(boolean onBreak) {
+        Game.onBreak = onBreak;
+    }
+
+    public static boolean hasClickedPlay() {
+        return clickedPlay;
+    }
+
+    public static void setClickedPlay(boolean clickedPlay) {
+        Game.clickedPlay = clickedPlay;
+    }
+
+    @Getter
 	@Setter
 	private static GameAccount gameAccount = null;
 
@@ -32,10 +58,12 @@ public class Game
 		return Static.getClientPacket();
 	}
 
-	public static boolean isLoggedIn()
-	{
-		return getState() == GameState.LOGGED_IN || getState() == GameState.LOADING;
-	}
+    public static boolean isLoggedIn()
+    {
+        return getState() == GameState.LOGGED_IN || getState() == GameState.LOADING;
+    }
+
+    public static boolean isPlaying() { return (getState() == GameState.LOGGED_IN || getState() == GameState.LOADING) && hasClickedPlay(); }
 
 	public static boolean isOnLoginScreen()
 	{
@@ -43,6 +71,28 @@ public class Game
 				|| getState() == GameState.LOGIN_SCREEN_AUTHENTICATOR
 				|| getState() == GameState.LOGGING_IN;
 	}
+
+    public static void clickPlay() {
+        if (WelcomeScreenEvent.isWelcomeScreenOpen() && !clickedPlay) {
+            new Thread(() -> {
+                Static.getClientThread().invoke(() -> {
+                    if (!clickedPlay) {
+                        Widget playButton = null;
+                        while (playButton == null) {
+                            playButton = WelcomeScreenEvent.getPlayButton();
+                        }
+                        Widget finalPlayButton = playButton;
+                        sleepRandom(1200, 2400);
+                        if (!clickedPlay) {
+                            Static.getClient().invokeWidgetAction(1, finalPlayButton.getId(), -1, -1, "");
+                            sleepUntil(() -> !Widgets.isVisible(finalPlayButton), 15000);
+                            clickedPlay = true;
+                        }
+                    }
+                });
+            }).start();
+        }
+    }
 
 	public static GameState getState()
 	{

@@ -1,8 +1,10 @@
 package net.unethicalite.api.movement.pathfinder.model;
 
+import net.runelite.api.VarPlayer;
 import net.runelite.api.coords.WorldArea;
 import net.unethicalite.api.entities.Players;
 import net.unethicalite.api.movement.Movement;
+import net.unethicalite.client.Static;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -47,6 +49,7 @@ public enum BankLocation
 	BURGH_DE_ROTT_BANK(new WorldArea(3492, 3208, 10, 6, 0)),
 	VER_SINHAZA_BANK(new WorldArea(3646, 3204, 10, 13, 0)),
 	FEROX_ENCLAVE_BANK(new WorldArea(3127, 3627, 10, 6, 0)),
+    MEMBERS_MINING_GUILD_BASEMENT(new WorldArea(3012, 9716, 3, 5, 0))
 	;
 
 	private final WorldArea area;
@@ -64,6 +67,7 @@ public enum BankLocation
 	public static BankLocation getNearest()
 	{
 		return Arrays.stream(values())
+                .filter(x -> Static.getClient().getVarpValue(VarPlayer.MEMBERSHIP_DAYS) > 0 || (!x.name().contains("MEMBERS_") && Static.getClient().getVarpValue(VarPlayer.MEMBERSHIP_DAYS) < 1))
 				.min(Comparator.comparingInt(x -> x.getArea().distanceTo2D(Players.getLocal().getWorldLocation())))
 				.orElse(null);
 	}
@@ -71,7 +75,8 @@ public enum BankLocation
 	public static BankLocation getNearestPath()
 	{
 		return Arrays.stream(values())
-				.min(Comparator.comparingInt(x -> Movement.calculateDistance(x.getArea())))
+                .filter(x -> Static.getClient().getVarpValue(VarPlayer.MEMBERSHIP_DAYS) > 0 || (!x.name().contains("MEMBERS_") && Static.getClient().getVarpValue(VarPlayer.MEMBERSHIP_DAYS) < 1))
+                .min(Comparator.comparingInt(x -> Movement.calculateDistance(x.getArea())))
 				.orElse(null);
 	}
 }

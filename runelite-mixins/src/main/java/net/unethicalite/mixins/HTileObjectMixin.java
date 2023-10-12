@@ -20,6 +20,8 @@ import net.runelite.rs.api.RSItemLayer;
 import net.runelite.rs.api.RSObjectComposition;
 import net.runelite.rs.api.RSWallDecoration;
 
+import java.awt.*;
+
 @Mixins({
 		@Mixin(RSWallDecoration.class),
 		@Mixin(RSGameObject.class),
@@ -129,14 +131,29 @@ public abstract class HTileObjectMixin implements TileObject
 	@Inject
 	public Point getClickPoint()
 	{
-		if (this instanceof GameObject)
-		{
-			return Randomizer.getRandomPointIn(((RSGameObject) this).getRenderable().getCachedBounds());
-		}
-		else
-		{
-			return Randomizer.getRandomPointIn(getCanvasTilePoly().getBounds());
-		}
+        Shape shape;
+        if (this instanceof GameObject)
+        {
+            shape = ((GameObject) this).getConvexHull();
+        }
+        else if (this instanceof RSBoundaryObject)
+        {
+            shape = ((RSBoundaryObject) this).getConvexHull();
+        }
+        else if (this instanceof RSFloorDecoration)
+        {
+            shape = ((RSFloorDecoration) this).getConvexHull();
+        }
+        else if (this instanceof RSWallDecoration)
+        {
+            shape = ((RSWallDecoration) this).getConvexHull();
+        }
+        else
+        {
+            shape = this.getCanvasTilePoly();
+        }
+
+        return shape != null ? Randomizer.getRandomPointIn(shape.getBounds()) : null;
 	}
 
 	@Inject

@@ -6,6 +6,8 @@ import net.unethicalite.client.Static;
 import java.awt.Canvas;
 import java.awt.event.KeyEvent;
 
+import static net.runelite.api.util.Numbers.sleepRand;
+
 public class Keyboard
 {
 	public static void pressed(int keyCode)
@@ -80,19 +82,35 @@ public class Keyboard
 		type(text, false);
 	}
 
-	public static void type(String text, boolean sendEnter)
-	{
-		char[] chars = text.toCharArray();
-		for (char c : chars)
-		{
-			type(c);
-		}
+    public static void type(String text, boolean sendEnter)
+    {
+        char[] chars = text.toCharArray();
+        for (char c : chars)
+        {
+            type(c);
+        }
 
-		if (sendEnter)
-		{
-			sendEnter();
-		}
-	}
+        if (sendEnter)
+        {
+            sendEnter();
+        }
+    }
+
+    public static void typeHuman(String text, boolean sendEnter)
+    {
+        char[] chars = text.toCharArray();
+        for (char c : chars)
+        {
+            type(c);
+            sleepRand();
+        }
+
+        if (sendEnter)
+        {
+            sendEnter();
+            sleepRand();
+        }
+    }
 
 	public static void sendEnter()
 	{

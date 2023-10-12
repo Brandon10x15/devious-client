@@ -26,6 +26,7 @@ package net.runelite.api.coords;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 import lombok.Getter;
@@ -36,6 +37,8 @@ import net.runelite.api.Locatable;
 import net.runelite.api.Point;
 import net.runelite.api.Tile;
 import net.runelite.api.Constants;
+
+import static net.runelite.api.util.Numbers.getRandomNumber;
 
 /**
  * Represents an area on the world.
@@ -874,6 +877,19 @@ public class WorldArea
 	{
 		return new WorldPoint(x + (width / 2), y + (height / 2), plane);
 	}
+
+    public WorldPoint getPointNearCenter()
+    {
+        WorldPoint center = getCenter();
+        int newX = center.getX() + getRandomNumber(-4, 4);
+        int newY = center.getY() + getRandomNumber(-4, 4);
+        //System.out.println(newX + ", " + newY);
+        if(newX > 0 && newY > 0) {
+            return new WorldPoint(newX, newY, center.getPlane());
+        } else {
+            return getCenter();
+        }
+    }
 
 	public WorldArea offset(int offset)
 	{

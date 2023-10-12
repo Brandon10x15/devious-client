@@ -57,6 +57,7 @@ import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.PluginPanel;
 import net.runelite.client.util.ImageUtil;
 import net.runelite.client.util.SwingUtil;
+import net.unethicalite.api.utils.MessageUtils;
 
 class PluginListItem extends JPanel implements SearchablePlugin
 {
@@ -193,6 +194,9 @@ class PluginListItem extends JPanel implements SearchablePlugin
 							protected void done()
 							{
 								pluginListPanel.rebuildPluginList();
+                                try {
+                                    MessageUtils.success("Reloaded plugin " + pluginConfig.getPlugin().getClass().getSimpleName() + ".");
+                                } catch (Exception | Error ignored) { }
 							}
 						}.execute();
 					}

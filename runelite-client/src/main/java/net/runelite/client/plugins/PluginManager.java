@@ -655,6 +655,19 @@ public class PluginManager
 		return plugins;
 	}
 
+    public Plugin getPlugin(String projectPluginName) {
+        /*String pluginNames = "";
+        for (Plugin plug : plugins) { pluginNames += plug.getName() + ", "; }
+        System.out.println(pluginNames.substring(0, pluginNames.length() - 2));*/
+        for (Plugin plug : plugins) {
+            if (plug.getName().toLowerCase().equals(projectPluginName.toLowerCase()) || plug.getName().toLowerCase().contains(projectPluginName.toLowerCase())) {
+                return plug;
+            }
+        }
+        log.info("Could not find plugin containing '" + projectPluginName + "', use the name from settings.gradle.");
+        return null;
+    }
+
 	/**
 	 * Topologically sort a graph into separate groups.
 	 * Each group represents the dependency level of the plugins.

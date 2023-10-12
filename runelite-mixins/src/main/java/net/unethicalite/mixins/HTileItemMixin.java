@@ -1,5 +1,7 @@
 package net.unethicalite.mixins;
 
+import net.runelite.api.Perspective;
+import net.runelite.api.coords.LocalPoint;
 import net.unethicalite.api.events.MenuAutomated;
 import net.unethicalite.api.util.Randomizer;
 import net.unethicalite.api.util.Text;
@@ -11,6 +13,8 @@ import net.runelite.api.mixins.Mixin;
 import net.runelite.api.mixins.Shadow;
 import net.runelite.rs.api.RSClient;
 import net.runelite.rs.api.RSTileItem;
+
+import java.awt.*;
 
 @Mixin(RSTileItem.class)
 public abstract class HTileItemMixin implements RSTileItem
@@ -98,7 +102,11 @@ public abstract class HTileItemMixin implements RSTileItem
 	@Inject
 	public Point getClickPoint()
 	{
-		return Randomizer.getRandomPointIn(getCachedBounds());
+        LocalPoint localPoint = this.getLocalLocation();
+        Shape convexHull = this.getModel().getConvexHull(localPoint.getX(), localPoint.getY(), 0,
+                Perspective.getTileHeight(client, localPoint, this.getWorldLocation().getPlane()));
+
+        return Randomizer.getRandomPointIn(convexHull.getBounds());
 	}
 
 	@Inject

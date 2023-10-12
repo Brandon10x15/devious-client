@@ -62,11 +62,15 @@ public abstract class LoopedPlugin extends Plugin implements Runnable
 
 				sleepUntil = 0;
 
+                if(!Plugins.isEnabled(this)) {
+                    SwingUtilities.invokeLater(() -> Plugins.stopPlugin(this));
+                    return;
+                }
+
 				currentSleep = this instanceof Script ? ((Script) this).outerLoop() : loop();
 			}
 			catch (PluginStoppedException e)
 			{
-				SwingUtilities.invokeLater(() -> Plugins.stopPlugin(this));
 			}
 			finally
 			{

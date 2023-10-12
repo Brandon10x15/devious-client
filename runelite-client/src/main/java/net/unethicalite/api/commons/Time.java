@@ -14,6 +14,30 @@ public class Time
 	private static final Logger logger = LoggerFactory.getLogger(Time.class);
 	private static final int DEFAULT_POLLING_RATE = 10;
 
+    public enum TimeMultiplier {
+        TICKS(600),
+        SECONDS(1000),
+        MINUTES(60*1000),
+        HOURS(60*60*1000),
+        DAYS(24*60*60*1000),
+        WEEKS(7*24*60*60*1000),
+        MONTHS(30L *24*60*60*1000),
+        YEARS(365L *24*60*60*1000);
+
+        private final long multiplier;
+        TimeMultiplier(long multiplier) {
+            this.multiplier = multiplier;
+        }
+
+        public long getMultiplier() {
+            return multiplier;
+        }
+    }
+
+    public static long getMilliseconds(long number, TimeMultiplier timeMultiplier ) {
+        return number * timeMultiplier.getMultiplier();
+    }
+
 	public static boolean sleep(long ms)
 	{
 		if (Static.getClient().isClientThread())

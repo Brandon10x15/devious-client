@@ -18,6 +18,9 @@ public interface Interactable
 
 	default int getActionIndex(String action)
 	{
+        if(getActions() == null || getActions().length < 1) {
+            return -1;
+        }
 		return Arrays.asList(getActions()).indexOf(action);
 	}
 

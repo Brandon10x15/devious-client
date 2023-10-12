@@ -148,4 +148,5 @@ public class Static
 	{
 		return getClient().isInInstancedRegion() ? globalCollisionMap.withLocalCollisions() : globalCollisionMap;
 	}
+
 }
