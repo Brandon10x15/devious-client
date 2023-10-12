@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2017, Adam <Adam@sigterm.info>
+ * Copyright (c) 2022 Abex
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,25 +22,52 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.rs.api;
+package net.runelite.api;
 
-import net.runelite.api.Renderable;
-import net.runelite.mapping.Import;
-
-public interface RSRenderable extends RSNode, Renderable
+/**
+ * Jagex 2D and 3D drawing utilities.
+ * Similar to AWT's {@link java.awt.Graphics2D}
+ *
+ * @see JagexColor
+ */
+public interface Rasterizer
 {
-	@Import("height")
-	int getModelHeight();
+	/**
+	 * Gets the back buffer of the rasterizer
+	 *
+	 * ARGB or RGB depending on {@link Client#isGpu()}
+	 */
+	int[] getPixels();
 
-	@Import("height")
-	@Override
-	void setModelHeight(int modelHeight);
+	/**
+	 * Width of {@link #getPixels()}
+	 */
+	int getWidth();
 
-	@Import("getModel")
-	@Override
-	RSModel getModel();
+	/**
+	 * Height of {@link #getPixels()}
+	 */
+	int getHeight();
 
-	@Import("draw")
-	@Override
-	void draw(int orientation, int pitchSin, int pitchCos, int yawSin, int yawCos, int x, int y, int z, long hash);
+
+	/**
+	 * Draws a filled rectangle onto the rasterizer buffer at full opacity
+	 */
+	void fillRectangle(int x, int y, int w, int h, int rgb);
+
+	/**
+	 * Draws a filled triangle onto the rasterizer buffer at rasterizer opacity
+	 */
+	void rasterFlat(int y0, int y1, int y2, int x0, int x1, int x2, int rgb);
+
+
+	/**
+	 * Sets if {@link #rasterGouraud} uses a faster shading algorithm
+	 */
+	void setRasterGouraudLowRes(boolean lowRes);
+
+	/**
+	 * Draws a gouraud shaded filled triangle onto the rasterizer buffer at rasterizer opacity
+	 */
+	void rasterGouraud(int y0, int y1, int y2, int x0, int x1, int x2, int hsl0, int hsl1, int hsl2);
 }

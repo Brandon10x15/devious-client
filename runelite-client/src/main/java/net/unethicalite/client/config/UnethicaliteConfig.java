@@ -373,6 +373,18 @@ public interface UnethicaliteConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "useEquipmentTeleports",
+		name = "Use teleports from equipment",
+		description = "",
+		position = 4,
+		section = pathfinderSection
+	)
+	default boolean useEquipmentTeleports()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "useMinigameTeleports",
 		name = "Use minigames teleports",
 		description = "",
@@ -380,6 +392,18 @@ public interface UnethicaliteConfig extends Config
 		section = pathfinderSection
 	)
 	default boolean useMinigameTeleports()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "useCharterShips",
+		name = "Use charter ships",
+		description = "",
+		position = 4,
+		section = pathfinderSection
+	)
+	default boolean useCharterShips()
 	{
 		return true;
 	}
