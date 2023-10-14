@@ -164,7 +164,7 @@ public class Jarvis
 		int x = xs[idx];
 		int y = ys[idx];
 
-		for (int i = 1; i < length; i++)
+		for (int i = 1; i < length-1; i++)
 		{
 			int ix = xs[i];
 			if (ix < x || ix == x && ys[i] < y)

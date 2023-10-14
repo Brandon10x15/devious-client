@@ -175,6 +175,7 @@ public class NaturalMouse
 		@Override
 		public void setMousePosition(int x, int y)
 		{
+            if(client == null || client.getMouseHandler() == null) { return; }
 			client.getMouseHandler().sendMovement(x, y);
 		}
 	}
